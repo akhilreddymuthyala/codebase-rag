@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CodeRAG — Chat</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/chat.css" />
+</head>
+<body class="chat-page">
+
+  <header class="header">
+    <div class="header__logo">
+      <a href="index.html" class="header__back" aria-label="Back to upload">&#8592;</a>
+      <div class="header__logo-mark">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M3 5L8 2L13 5V11L8 14L3 11V5Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          <circle cx="8" cy="8" r="1.5" fill="currentColor"/>
+        </svg>
+      </div>
+      CodeRAG
+    </div>
+
+    <div class="header__session" id="sessionInfo">
+      <span class="session-badge" id="sessionBadge"></span>
+      <span class="session-meta" id="sessionMeta"></span>
+    </div>
+
+    <nav class="header__nav">
+      <div class="header__status">
+        <span class="status-dot" id="statusDot"></span>
+        <span class="status-text" id="statusText">Connecting</span>
+      </div>
+      <a href="index.html" class="btn btn--ghost btn--sm" id="newSessionBtn">+ New</a>
+    </nav>
+  </header>
+
+  <div class="chat-layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar__header">
+        <h2 class="sidebar__title">Files</h2>
+        <span class="sidebar__count" id="fileCount">0</span>
+      </div>
+      <div class="sidebar__body" id="fileTree"></div>
+    </aside>
+
+    <!-- Chat -->
+    <main class="chat-main">
+      <div class="messages" id="messages">
+        <div class="welcome-msg" id="welcomeMsg">
+          <div class="welcome-msg__icon">&#10022;</div>
+          <h2 class="welcome-msg__title">Ready to explore</h2>
+          <p class="welcome-msg__sub">Ask anything about your codebase — architecture, logic, specific lines.</p>
+          <div class="welcome-msg__suggestions" id="suggestions">
+            <button class="suggestion-chip">What does this project do?</button>
+            <button class="suggestion-chip">Explain the architecture</button>
+            <button class="suggestion-chip">What are the main components?</button>
+            <button class="suggestion-chip">How is data managed?</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="chat-input-wrap">
+        <div class="chat-input-bar">
+          <textarea
+            class="chat-input"
+            id="chatInput"
+            placeholder="Ask about your code..."
+            rows="1"
+            autocomplete="off"
+            spellcheck="false"
+          ></textarea>
+          <button class="send-btn" id="sendBtn" disabled aria-label="Send">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/>
+            </svg>
+          </button>
+        </div>
+        <p class="chat-input-hint">
+          <span id="modelBadge" class="model-badge">gpt-4o-mini</span>
+          Press <kbd>Ctrl+Enter</kbd> to send
+        </p>
+      </div>
+    </main>
+
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/chat.js"></script>
+</body>
+</html>

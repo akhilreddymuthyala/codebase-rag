@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CodeRAG</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<header class="header">
+  <div class="header__logo">
+    <div class="header__logo-mark">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 5L8 2L13 5V11L8 14L3 11V5Z" stroke="currentColor" stroke-width="1.5" fill="none"/><circle cx="8" cy="8" r="1.5" fill="currentColor"/></svg>
+    </div>
+    CodeRAG
+  </div>
+  <div class="header__status">
+    <span class="status-dot" id="statusDot"></span>
+    <span class="status-text" id="statusText">Connecting</span>
+  </div>
+</header>
+<main class="main">
+  <section class="hero">
+    <p class="hero__eyebrow">AI-Powered Code Intelligence</p>
+    <h1 class="hero__title">Ask anything about<br><em>your codebase</em></h1>
+    <p class="hero__sub">Upload a ZIP or connect a GitHub repository. CodeRAG indexes your code and answers questions with precision.</p>
+  </section>
+  <div class="card" id="uploadCard">
+    <div class="tab-bar">
+      <button class="tab tab--active" data-tab="zip" id="tabZip">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        ZIP Upload
+      </button>
+      <button class="tab" data-tab="github" id="tabGithub">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        GitHub URL
+      </button>
+    </div>
+    <div class="tab-panel tab-panel--active" id="panelZip">
+      <div class="dropzone" id="dropzone">
+        <input type="file" id="fileInput" accept=".zip" hidden />
+        <div class="dropzone__idle" id="dropzoneIdle">
+          <div class="dropzone__icon-wrap">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          </div>
+          <p class="dropzone__label">Drop your ZIP here</p>
+          <p class="dropzone__sub">or <button class="dropzone__browse" id="browseBtn">browse files</button></p>
+          <p class="dropzone__hint">Max 100MB &middot; .zip only</p>
+        </div>
+        <div class="dropzone__file" id="dropzoneFile" hidden>
+          <div class="dropzone__file-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          </div>
+          <div class="dropzone__file-info">
+            <p class="dropzone__file-name" id="fileName">file.zip</p>
+            <p class="dropzone__file-size" id="fileSize">0 KB</p>
+          </div>
+          <button class="dropzone__file-clear" id="fileClear">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="tab-panel" id="panelGithub">
+      <div class="input-group">
+        <label class="input-label" for="repoUrl">Repository URL</label>
+        <input class="input" id="repoUrl" type="url" placeholder="https://github.com/username/repo" />
+      </div>
+      <div class="input-group">
+        <label class="input-label" for="branch">Branch <span class="input-label__opt">(optional, default: main)</span></label>
+        <input class="input" id="branch" type="text" placeholder="main" />
+      </div>
+    </div>
+    <div class="card__footer">
+      <div class="progress-wrap" id="progressWrap" hidden>
+        <div class="progress-stages" id="progressStages">
+          <span class="stage" id="stage1">Uploading</span>
+          <span class="stage" id="stage2">Parsing</span>
+          <span class="stage" id="stage3">Indexing</span>
+          <span class="stage" id="stage4">Ready</span>
+        </div>
+        <div class="progress-bar"><div class="progress-bar__fill" id="progressFill"></div></div>
+        <p class="progress-label" id="progressLabel">Preparing</p>
+      </div>
+      <div id="errorWrap" hidden>
+        <div class="alert alert--error" id="errorMsg"></div>
+      </div>
+      <button class="btn btn--primary" id="indexBtn" disabled>
+        <span id="btnLabel">Index Codebase</span>
+        <svg class="btn__arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="features">
+    <div class="feature">
+      <div class="feature__icon">&#9889;</div>
+      <div>
+        <p class="feature__title">Semantic Search</p>
+        <p class="feature__sub">Finds relevant code by meaning</p>
+      </div>
+    </div>
+    <div class="feature">
+      <div class="feature__icon">&#127919;</div>
+      <div>
+        <p class="feature__title">Zero Hallucinations</p>
+        <p class="feature__sub">Grounded strictly in your code</p>
+      </div>
+    </div>
+    <div class="feature">
+      <div class="feature__icon">&#128274;</div>
+      <div>
+        <p class="feature__title">Session Isolated</p>
+        <p class="feature__sub">Each upload starts completely fresh</p>
+      </div>
+    </div>
+  </div>
+</main>
+<script src="js/api.js"></script>
+<script src="js/upload.js"></script>
+</body>
+</html>
