@@ -29,11 +29,12 @@ class Settings(BaseSettings):
     local_embedding_model: str = "all-MiniLM-L6-v2"
     
     # Redis
-    redis_host: str = "localhost"
-    redis_port: int = 6379
-    redis_password: str = ""
-    redis_db: int = 0
-    
+
+    redis_host: str = os.getenv("REDIS_HOST")
+    redis_port: int = int(os.getenv("REDIS_PORT", 6380))
+    redis_password: str = os.getenv("REDIS_PASSWORD")
+    redis_db: int = int(os.getenv("REDIS_DB", 0))
+        
     # ChromaDB
     chroma_persist_directory: str = "./chroma_db"
     chroma_host: str = "localhost"

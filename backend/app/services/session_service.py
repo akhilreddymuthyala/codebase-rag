@@ -20,6 +20,8 @@ class SessionService:
     def __init__(self):
         """Initialize Redis connection."""
         try:
+            print("REDIS HOST:", settings.redis_host)
+            print("REDIS PORT:", settings.redis_port)
             self.redis_client = redis.Redis(
                 host=settings.redis_host,
                 port=settings.redis_port,
@@ -27,7 +29,8 @@ class SessionService:
                 db=settings.redis_db,
                 decode_responses=True,
                 socket_connect_timeout=5,
-                socket_timeout=5
+                socket_timeout=5,
+                ssl=True
             )
             # Test connection
             self.redis_client.ping()
